@@ -8,7 +8,8 @@ const envConfig = {
   SALT_ROUND: process.env.SALT_ROUND,
   SMTP_PASS: process.env.SMTP_PASS,
   SMTP_USER: process.env.SMTP_USER,
-  jwt_access_secret: process.env.ACC_SEC
+  JWT_ACC_SEC: process.env.ACC_SEC,
+  JWT_REF_SEC: process.env.REF_SEC,
 };
 
 module.exports = envConfig;

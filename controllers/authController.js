@@ -2,6 +2,7 @@ const {
   signupServices,
   otpVerifyServices,
   resendOtpServices,
+  signInServices,
 } = require("../services/authServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -95,4 +96,35 @@ const resendOtpController = async (req, res) => {
   }
 };
 
-module.exports = { signupController, otpVerifyController, resendOtpController };
+// -----login controller
+const signInController = async (req, res) => {
+  try {
+    const result = await signInServices(req.body);
+
+    const { accessToken, refreshToken } = result;
+
+    res.cookie("accessToken", accessToken);
+
+    res.cookie("refreshToken", refreshToken);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "login successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  signupController,
+  otpVerifyController,
+  resendOtpController,
+  signInController,
+};

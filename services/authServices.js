@@ -8,6 +8,7 @@ const bcrypt = require("bcrypt");
 const envConfig = require("../helpers/envConfig");
 const { mailSender } = require("../helpers/mailService");
 const { OTPMailTemp } = require("../helpers/OTPmailTemplates");
+const { createToken } = require("../helpers/jwt");
 
 // -----signup Services
 const signupServices = async (payload) => {
@@ -175,7 +176,7 @@ const resendOtpServices = async (payload) => {
 
   userData.otp = otp;
   userData.otpExpiry = Date.now() + 5 * 60 * 1000;
-  await userData.save()
+  await userData.save();
 
   // ------sending otp on email
   await mailSender({
@@ -184,9 +185,81 @@ const resendOtpServices = async (payload) => {
     mailTemp: OTPMailTemp(otp),
   });
 
-  const user = await userSchema.findById(userData._id).select("-password -otp -otpExpiry -resetToken");
+  const user = await userSchema
+    .findById(userData._id)
+    .select("-password -otp -otpExpiry -resetToken");
 
-  return user
+  return user;
 };
 
-module.exports = { signupServices, otpVerifyServices, resendOtpServices };
+// -----login services
+const signInServices = async (payload) => {
+  const { email, password } = payload;
+
+  // ----get a empty obj for all validation errors togather
+  const errors = {};
+
+  // ---email validatine
+  if (!email) {
+    errors.email = "Email is required";
+  } else if (!isValidateEmail(email)) {
+    errors.email = "Email not valid";
+  }
+
+  // ---password validatine
+  if (!password) {
+    errors.password = "Password is required";
+  } else if (!isValidatePassword(password)) {
+    errors.password = "Password not valid";
+  }
+
+  // --------sending errors
+  if (Object.keys(errors).length > 0) {
+    return { errors: errors };
+  }
+
+  // --checking if user exist
+  const existUser = await userSchema.findOne({ email }).select("+password");
+
+  if (!existUser) {
+    throw new Error("invalid credantial");
+  }
+
+  // ----checking pass
+  if (!(await bcrypt.compare(password, existUser.password))) {
+    throw new Error("invalid credantial");
+  }
+
+  // ----checking if used verifies
+  if (!existUser.isVerified) {
+    throw new Error("user not verified");
+  }
+
+  // ============jwt token part start
+  const jwtPayload = {
+    id: existUser.id,
+    name: existUser.name,
+    email: existUser.email,
+    role: existUser.role,
+  };
+
+  // -------jwt acc token
+  const accessToken = createToken(jwtPayload, envConfig.JWT_ACC_SEC, {
+    expiresIn: "1d",
+  });
+
+  // -------jwt ref token
+  const refreshToken = createToken(jwtPayload, envConfig.JWT_REF_SEC, {
+    expiresIn: "7d",
+  });
+  // ============jwt token part end
+
+  return { accessToken, refreshToken };
+};
+
+module.exports = {
+  signupServices,
+  otpVerifyServices,
+  resendOtpServices,
+  signInServices,
+};
