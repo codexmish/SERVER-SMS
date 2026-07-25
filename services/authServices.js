@@ -144,4 +144,49 @@ const otpVerifyServices = async (payload) => {
   return userData;
 };
 
-module.exports = { signupServices, otpVerifyServices };
+// -----resend otp services
+const resendOtpServices = async (payload) => {
+  const { email } = payload;
+
+  // ----get a empty obj for all validation errors togather
+  const errors = {};
+
+  // ---email validatine
+  if (!email) {
+    errors.email = "Email is required";
+  } else if (!isValidateEmail(email)) {
+    errors.email = "Email not valid";
+  }
+
+  // --------sending errors
+  if (Object.keys(errors).length > 0) {
+    return { errors: errors };
+  }
+
+  // ----finding user
+  const userData = await userSchema.findOne({ email, isVerified: false });
+
+  if (!userData) {
+    throw new Error("Invalid Request");
+  }
+
+  //  otp generate
+  const otp = generateOTP();
+
+  userData.otp = otp;
+  userData.otpExpiry = Date.now() + 5 * 60 * 1000;
+  await userData.save()
+
+  // ------sending otp on email
+  await mailSender({
+    email,
+    subject: "verify your email",
+    mailTemp: OTPMailTemp(otp),
+  });
+
+  const user = await userSchema.findById(userData._id).select("-password -otp -otpExpiry -resetToken");
+
+  return user
+};
+
+module.exports = { signupServices, otpVerifyServices, resendOtpServices };
