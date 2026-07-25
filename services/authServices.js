@@ -6,6 +6,8 @@ const {
 const userSchema = require("../models/userSchema");
 const bcrypt = require("bcrypt");
 const envConfig = require("../helpers/envConfig");
+const { mailSender } = require("../helpers/mailService");
+const { OTPMailTemp } = require("../helpers/OTPmailTemplates");
 
 // -----signup Services
 const signupServices = async (payload) => {
@@ -60,6 +62,14 @@ const signupServices = async (payload) => {
     email,
     password: hashedPassword,
     otp,
+    otpExpiry: Date.now() + 5 * 60 * 1000,
+  });
+
+  // ------sending otp on email
+  await mailSender({
+    email,
+    subject: "verify your email",
+    mailTemp: OTPMailTemp(otp),
   });
 
   return userData;
