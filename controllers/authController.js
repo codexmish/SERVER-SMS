@@ -3,6 +3,7 @@ const {
   otpVerifyServices,
   resendOtpServices,
   signInServices,
+  getProfileServices,
 } = require("../services/authServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -111,6 +112,30 @@ const signInController = async (req, res) => {
       statusCode: 200,
       success: true,
       message: "login successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+// ------get profile controller
+const getProfileController = async (req, res) => {
+  try {
+    const id = req.user.data.id;
+
+    const result = await getProfileServices(id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "User data find successfully",
+      data: result,
     });
   } catch (error) {
     sendRes(res, {
@@ -127,4 +152,5 @@ module.exports = {
   otpVerifyController,
   resendOtpController,
   signInController,
+  getProfileController,
 };

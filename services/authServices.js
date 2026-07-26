@@ -257,9 +257,24 @@ const signInServices = async (payload) => {
   return { accessToken, refreshToken };
 };
 
+// ------get profile services
+const getProfileServices = async (_id) => {
+  // ----getting user data
+  const userData = await userSchema
+    .findById(_id)
+    .select("-otp -otpExpiry -resetToken");
+
+  if (!userData) {
+    throw new Error("Something bad");
+  }
+
+  return userData;
+};
+
 module.exports = {
   signupServices,
   otpVerifyServices,
   resendOtpServices,
   signInServices,
+  getProfileServices,
 };
