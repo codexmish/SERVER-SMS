@@ -10,6 +10,9 @@ const envConfig = {
   SMTP_USER: process.env.SMTP_USER,
   JWT_ACC_SEC: process.env.ACC_SEC,
   JWT_REF_SEC: process.env.REF_SEC,
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
 };
 
 module.exports = envConfig;

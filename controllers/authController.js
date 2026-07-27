@@ -4,6 +4,7 @@ const {
   resendOtpServices,
   signInServices,
   getProfileServices,
+  updateProfileServices,
 } = require("../services/authServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -147,10 +148,35 @@ const getProfileController = async (req, res) => {
   }
 };
 
+// -----update profile controller
+const updateProfileController = async (req, res) => {
+  try {
+    const userId = req.user.data.id;
+    const avaterData = req.file;
+
+    const result = await updateProfileServices(req.body, userId, avaterData);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "User data updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   signupController,
   otpVerifyController,
   resendOtpController,
   signInController,
   getProfileController,
+  updateProfileController,
 };

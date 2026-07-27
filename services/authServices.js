@@ -9,6 +9,10 @@ const envConfig = require("../helpers/envConfig");
 const { mailSender } = require("../helpers/mailService");
 const { OTPMailTemp } = require("../helpers/OTPmailTemplates");
 const { createToken } = require("../helpers/jwt");
+const {
+  uploadToCloudinary,
+  destroyFromCloudinary,
+} = require("../helpers/cloudinaryService");
 
 // -----signup Services
 const signupServices = async (payload) => {
@@ -271,10 +275,50 @@ const getProfileServices = async (_id) => {
   return userData;
 };
 
+// -----update profile Services
+const updateProfileServices = async (payload, userID, avaterData) => {
+  const { name, address } = payload;
+
+  // -----checking user
+  const userExist = await userSchema.findById(userID);
+
+  // ------geting update data
+  const updateData = {};
+
+  if (name) updateData.name = name;
+  if (address !== undefined) updateData.address = address;
+  if (avaterData) {
+    // -----uploading avater on cloudinary
+    const avaterUrl = await uploadToCloudinary(avaterData);
+    if (!avaterUrl) {
+      throw new Error("Something went wrong");
+    }
+    updateData.avatar = avaterUrl;
+  }
+
+  // -----updating data if data exist for update
+  if (Object.keys(updateData).length > 0) {
+    const updatedUser = await userSchema.findByIdAndUpdate(userID, updateData, {
+      returnDocument: "after",
+      runValidators: true,
+    });
+
+    // ----destroying preveous avater ulr if user update new avater
+    if (updateData.avatar) {
+      await destroyFromCloudinary(userExist.avatar);
+    }
+
+    return updatedUser;
+  } else {
+    throw new Error("Give data for update");
+  }
+};
+
 module.exports = {
   signupServices,
   otpVerifyServices,
   resendOtpServices,
   signInServices,
   getProfileServices,
+  updateProfileServices,
 };

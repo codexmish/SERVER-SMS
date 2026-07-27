@@ -1,10 +1,13 @@
 const express = require("express");
+const multer = require("multer");
+const upload = multer();
 const {
   signupController,
   otpVerifyController,
   resendOtpController,
   signInController,
   getProfileController,
+  updateProfileController,
 } = require("../../controllers/authController");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
@@ -19,6 +22,13 @@ router.post("/resend-otp", resendOtpController);
 // -----signIn router
 router.post("/signin", signInController);
 // -----get profile router
-router.get("/me",authMiddleware, getProfileController);
+router.get("/me", authMiddleware, getProfileController);
+// -----update profile
+router.patch(
+  "/update-profile",
+  authMiddleware,
+  upload.single("avatar"),
+  updateProfileController,
+);
 
 module.exports = router;

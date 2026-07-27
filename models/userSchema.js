@@ -31,22 +31,26 @@ const userSchema = new mongoose.Schema(
     otp: {
       type: String,
       default: null,
+      select: false,
     },
     otpExpiry: {
       type: Date,
+      select: false,
     },
     resetToken: {
       type: String,
       default: null,
+      select: false,
     },
     resetTokenExpiry: {
       type: Date,
+      select: false,
     },
     role: {
       type: String,
       require: true,
-      default: "user",
-      enum: ["user", "moderator", "admin"],
+      default: "STUDENT",
+      enum: ["STUDENT", "TEACHER", "ADMIN"],
     },
   },
   { timestamps: true },
