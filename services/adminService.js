@@ -24,4 +24,11 @@ const approveUserServices = async (id) => {
   return approveUser;
 };
 
-module.exports = { getUserServices, approveUserServices };
+// -----delete user services
+const deleteUserService = async (id) => {
+  const deleteUser = await userSchema.findByIdAndDelete(id);
+
+  return deleteUser;
+};
+
+module.exports = { getUserServices, approveUserServices, deleteUserService };

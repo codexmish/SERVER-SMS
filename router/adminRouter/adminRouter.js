@@ -2,6 +2,7 @@ const express = require("express");
 const {
   getUserController,
   approveUserController,
+  deleteUserController,
 } = require("../../controllers/adminController");
 const router = express.Router();
 
@@ -9,5 +10,7 @@ const router = express.Router();
 router.get("/users", getUserController);
 // -------aprroving user
 router.patch("/approve/:id", approveUserController);
+// -------delete user
+router.delete("/delete/:id", deleteUserController);
 
 module.exports = router;

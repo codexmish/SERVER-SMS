@@ -1,6 +1,7 @@
 const {
   getUserServices,
   approveUserServices,
+  deleteUserService,
 } = require("../services/adminService");
 const { sendRes } = require("../utils/sendRes");
 
@@ -46,4 +47,27 @@ const approveUserController = async (req, res) => {
   }
 };
 
-module.exports = { getUserController, approveUserController };
+const deleteUserController = async (req, res) => {
+  try {
+    const result = await deleteUserService(req.params.id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "User Deleted successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  getUserController,
+  approveUserController,
+  deleteUserController,
+};
