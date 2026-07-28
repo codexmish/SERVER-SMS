@@ -1,6 +1,16 @@
+const userSchema = require("../models/userSchema");
+
 // -----get all users Services
-const getUserServices = async()=>{
+const getUserServices = async () => {
+  const allUsers = await userSchema.find({
+    role: ["TEACHER", "STUDENT"],
+  });
 
-}
+  if (!allUsers) {
+    throw new Error("No User Found");
+  }
 
-module.exports = {getUserServices}
+  return allUsers;
+};
+
+module.exports = { getUserServices };
