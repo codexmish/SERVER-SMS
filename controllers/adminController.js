@@ -1,4 +1,7 @@
-const { getUserServices } = require("../services/adminService");
+const {
+  getUserServices,
+  approveUserServices,
+} = require("../services/adminService");
 const { sendRes } = require("../utils/sendRes");
 
 // -----get all users controller
@@ -22,4 +25,25 @@ const getUserController = async (req, res) => {
   }
 };
 
-module.exports = { getUserController };
+// ------approving user
+const approveUserController = async (req, res) => {
+  try {
+    const result = await approveUserServices(req.params.id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "User approved successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+module.exports = { getUserController, approveUserController };

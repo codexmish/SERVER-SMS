@@ -1,8 +1,13 @@
 const express = require("express");
-const { getUserController } = require("../../controllers/adminController");
+const {
+  getUserController,
+  approveUserController,
+} = require("../../controllers/adminController");
 const router = express.Router();
 
-router.get("/users", getUserController)
-
+// -------getting all user data
+router.get("/users", getUserController);
+// -------aprroving user
+router.patch("/approve/:id", approveUserController);
 
 module.exports = router;

@@ -13,4 +13,15 @@ const getUserServices = async () => {
   return allUsers;
 };
 
-module.exports = { getUserServices };
+// -----approve user services
+const approveUserServices = async (id) => {
+  const approveUser = await userSchema.findByIdAndUpdate(
+    id,
+    { isApproves: true },
+    { returnDocument: "after", runValidators: true },
+  );
+
+  return approveUser;
+};
+
+module.exports = { getUserServices, approveUserServices };
