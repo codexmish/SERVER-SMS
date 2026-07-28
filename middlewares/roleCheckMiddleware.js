@@ -1,6 +1,6 @@
 const { sendRes } = require("../utils/sendRes");
 
-const roleCheckMiddleware = async (Roles) => {
+const roleCheckMiddleware = (Roles) => {
   return (req, res, next) => {
     if (Array.isArray(Roles) && Roles.length > 0) {
       if (Roles.includes(req.user.data.role)) {
