@@ -172,6 +172,11 @@ const updateProfileController = async (req, res) => {
   }
 };
 
+// ----reset password controller 
+const resetPasswordController = async(req, res)=>{
+
+}
+
 module.exports = {
   signupController,
   otpVerifyController,
@@ -179,4 +184,5 @@ module.exports = {
   signInController,
   getProfileController,
   updateProfileController,
+  resetPasswordController
 };

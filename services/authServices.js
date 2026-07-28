@@ -314,6 +314,11 @@ const updateProfileServices = async (payload, userID, avaterData) => {
   }
 };
 
+// -----reset password services
+const resetPasswordServices = async()=>{
+
+}
+
 module.exports = {
   signupServices,
   otpVerifyServices,
@@ -321,4 +326,5 @@ module.exports = {
   signInServices,
   getProfileServices,
   updateProfileServices,
+  resetPasswordServices
 };
