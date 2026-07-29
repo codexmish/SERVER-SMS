@@ -40,11 +40,24 @@ const getPendingUsersServices = async () => {
     isApproves: false,
   });
 
-  if (!pendingUsers) {
+  if (!pendingUsers || pendingUsers.length === 0) {
     throw new Error("No pending users found");
   }
 
   return pendingUsers;
+};
+
+// ------get all approved user services
+const getAllApprovedUserServices = async () => {
+  const approvesUsers = await userSchema.find({
+    isApproves: true,
+  });
+
+  if (!approvesUsers || approvesUsers.length === 0) {
+    throw new Error("No approved users found");
+  }
+
+  return approvesUsers;
 };
 
 module.exports = {
@@ -52,4 +65,5 @@ module.exports = {
   approveUserServices,
   deleteUserService,
   getPendingUsersServices,
+  getAllApprovedUserServices,
 };

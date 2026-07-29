@@ -4,6 +4,7 @@ const {
   approveUserController,
   deleteUserController,
   getPendingUsersController,
+  getAllApprovedUserController,
 } = require("../../controllers/adminController");
 const router = express.Router();
 
@@ -15,5 +16,7 @@ router.patch("/approve/:id", approveUserController);
 router.delete("/delete/:id", deleteUserController);
 // -------get pending users
 router.get("/pending", getPendingUsersController)
+// -------get all approved users 
+router.get("/approved-user", getAllApprovedUserController)
 
 module.exports = router;

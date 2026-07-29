@@ -3,6 +3,7 @@ const {
   approveUserServices,
   deleteUserService,
   getPendingUsersServices,
+  getAllApprovedUserServices,
 } = require("../services/adminService");
 const { sendRes } = require("../utils/sendRes");
 
@@ -89,9 +90,31 @@ const getPendingUsersController = async (req, res) => {
   }
 };
 
+// ------get all approved user controller
+const getAllApprovedUserController = async (req, res) => {
+  try {
+    const result = await getAllApprovedUserServices();
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "All approved users get successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   getUserController,
   approveUserController,
   deleteUserController,
   getPendingUsersController,
+  getAllApprovedUserController,
 };
