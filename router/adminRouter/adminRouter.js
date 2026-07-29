@@ -5,6 +5,7 @@ const {
   deleteUserController,
   getPendingUsersController,
   getAllApprovedUserController,
+  getAllStudentController,
 } = require("../../controllers/adminController");
 const router = express.Router();
 
@@ -18,5 +19,7 @@ router.delete("/delete/:id", deleteUserController);
 router.get("/pending", getPendingUsersController)
 // -------get all approved users 
 router.get("/approved-user", getAllApprovedUserController)
+// ------get all students
+router.get("/students", getAllStudentController)
 
 module.exports = router;

@@ -4,6 +4,7 @@ const {
   deleteUserService,
   getPendingUsersServices,
   getAllApprovedUserServices,
+  getAllStudentsServices,
 } = require("../services/adminService");
 const { sendRes } = require("../utils/sendRes");
 
@@ -111,10 +112,32 @@ const getAllApprovedUserController = async (req, res) => {
   }
 };
 
+// -----get all student controller
+const getAllStudentController = async (req, res)=>{
+  try {
+    const result = await getAllStudentsServices()
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "All Studentss get successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+}
+
 module.exports = {
   getUserController,
   approveUserController,
   deleteUserController,
   getPendingUsersController,
   getAllApprovedUserController,
+  getAllStudentController
 };

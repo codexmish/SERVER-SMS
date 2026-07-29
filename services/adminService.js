@@ -60,10 +60,25 @@ const getAllApprovedUserServices = async () => {
   return approvesUsers;
 };
 
+// ------get all student services
+const getAllStudentsServices = async () => {
+  const allStudents = await userSchema.find({
+    role: "STUDENT",
+    isApproves: true,
+  });
+
+  if (!allStudents || allStudents.length === 0) {
+    throw new Error("No student data found");
+  }
+
+  return allStudents;
+};
+
 module.exports = {
   getUserServices,
   approveUserServices,
   deleteUserService,
   getPendingUsersServices,
   getAllApprovedUserServices,
+  getAllStudentsServices,
 };
