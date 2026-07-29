@@ -74,6 +74,20 @@ const getAllStudentsServices = async () => {
   return allStudents;
 };
 
+// ------get all Teacher services
+const getAllTeacherServices = async () => {
+  const allTeacher = await userSchema.find({
+    role: "TEACHER",
+    isApproves: true,
+  });
+
+  if (!allTeacher || allTeacher.length === 0) {
+    throw new Error("No teacher data found");
+  }
+
+  return allTeacher;
+};
+
 module.exports = {
   getUserServices,
   approveUserServices,
@@ -81,4 +95,5 @@ module.exports = {
   getPendingUsersServices,
   getAllApprovedUserServices,
   getAllStudentsServices,
+  getAllTeacherServices,
 };
