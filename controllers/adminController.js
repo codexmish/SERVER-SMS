@@ -2,6 +2,7 @@ const {
   getUserServices,
   approveUserServices,
   deleteUserService,
+  getPendingUsersServices,
 } = require("../services/adminService");
 const { sendRes } = require("../utils/sendRes");
 
@@ -26,7 +27,7 @@ const getUserController = async (req, res) => {
   }
 };
 
-// ------approving user
+// ------approving user controller
 const approveUserController = async (req, res) => {
   try {
     const result = await approveUserServices(req.params.id);
@@ -47,6 +48,7 @@ const approveUserController = async (req, res) => {
   }
 };
 
+// -------delete users controller
 const deleteUserController = async (req, res) => {
   try {
     const result = await deleteUserService(req.params.id);
@@ -66,8 +68,30 @@ const deleteUserController = async (req, res) => {
   }
 };
 
+// -------get pending users controller
+const getPendingUsersController = async (req, res) => {
+  try {
+    const result = await getPendingUsersServices();
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "All pending users",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   getUserController,
   approveUserController,
   deleteUserController,
+  getPendingUsersController,
 };

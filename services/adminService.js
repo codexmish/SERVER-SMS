@@ -31,4 +31,25 @@ const deleteUserService = async (id) => {
   return deleteUser;
 };
 
-module.exports = { getUserServices, approveUserServices, deleteUserService };
+// -----get pending users services
+const getPendingUsersServices = async () => {
+  const pendingUsers = await userSchema.find({
+    role: {
+      $in: ["TEACHER", "STUDENT"],
+    },
+    isApproves: false,
+  });
+
+  if (!pendingUsers) {
+    throw new Error("No pending users found");
+  }
+
+  return pendingUsers;
+};
+
+module.exports = {
+  getUserServices,
+  approveUserServices,
+  deleteUserService,
+  getPendingUsersServices,
+};
