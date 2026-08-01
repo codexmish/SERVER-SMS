@@ -29,7 +29,6 @@ const createSubjectServices = async (payload, adminId) => {
 
   //   ------checking if subject already exist
   const subjectExist = await subjectSchema.findOne({
-    name,
     code,
   });
 

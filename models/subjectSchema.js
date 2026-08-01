@@ -9,6 +9,7 @@ const subjectSchema = new mongoose.Schema(
     code: {
       type: String,
       required: true,
+      unique: true,
     },
     description: {
       type: String,
