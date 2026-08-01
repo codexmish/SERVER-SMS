@@ -12,12 +12,11 @@ const subjectSchema = new mongoose.Schema(
     },
     description: {
       type: String,
-      required: true,
+      required: false,
     },
     credit: {
       type: Number,
       required: true,
-      default: 4,
       min: 0,
     },
     creatorId: {
