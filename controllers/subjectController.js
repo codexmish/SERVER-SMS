@@ -1,6 +1,7 @@
 const {
   createSubjectServices,
   getSubjectServices,
+  deleteSubjectServices,
 } = require("../services/subjectServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -46,4 +47,29 @@ const getSubjectConroller = async (req, res) => {
   }
 };
 
-module.exports = { createSubjectConroller, getSubjectConroller };
+// -------delete subject controller
+const deleteSubjectConroller = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await deleteSubjectServices(id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Subject deleted successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
+module.exports = {
+  createSubjectConroller,
+  getSubjectConroller,
+  deleteSubjectConroller,
+};

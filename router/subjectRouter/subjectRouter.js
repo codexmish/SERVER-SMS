@@ -2,6 +2,7 @@ const express = require("express");
 const {
   createSubjectConroller,
   getSubjectConroller,
+  deleteSubjectConroller,
 } = require("../../controllers/subjectController");
 const router = express.Router();
 
@@ -9,5 +10,7 @@ const router = express.Router();
 router.post("/create", createSubjectConroller);
 // -----------get subject
 router.get("/subjectlist", getSubjectConroller);
+// ------delete subject
+router.delete("/delete/:id", deleteSubjectConroller)
 
 module.exports = router;

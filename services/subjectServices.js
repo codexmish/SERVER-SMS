@@ -58,4 +58,22 @@ const getSubjectServices = async () => {
   return subjectList;
 };
 
-module.exports = { createSubjectServices, getSubjectServices };
+// ------delete subject
+const deleteSubjectServices = async (subjectId) => {
+  // ------check if subject not exist
+  const existSubject = await subjectSchema.findById(subjectId);
+
+  if (!existSubject) {
+    throw new Error("Subject not found");
+  }
+
+  // ------deleting subject
+  await subjectSchema.findByIdAndDelete(existSubject.id);
+  return;
+};
+
+module.exports = {
+  createSubjectServices,
+  getSubjectServices,
+  deleteSubjectServices,
+};
