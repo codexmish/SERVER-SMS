@@ -1,18 +1,13 @@
 const express = require("express");
 const {
   createSubjectConroller,
+  getSubjectConroller,
 } = require("../../controllers/subjectController");
-const authMiddleware = require("../../middlewares/authMiddleware");
-const roleCheckMiddleware = require("../../middlewares/roleCheckMiddleware");
-
 const router = express.Router();
 
 // -----create subject
-router.post(
-  "/create",
-  authMiddleware,
-  roleCheckMiddleware(["ADMIN"]),
-  createSubjectConroller,
-);
+router.post("/create", createSubjectConroller);
+// -----------get subject
+router.get("/subjectlist", getSubjectConroller);
 
 module.exports = router;

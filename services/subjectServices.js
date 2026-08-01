@@ -48,4 +48,14 @@ const createSubjectServices = async (payload, adminId) => {
   return newSubject;
 };
 
-module.exports = { createSubjectServices };
+// -------get subject
+const getSubjectServices = async () => {
+  const subjectList = await subjectSchema.find();
+
+  if (subjectList.length == 0) {
+    throw new Error("No subject found");
+  }
+  return subjectList;
+};
+
+module.exports = { createSubjectServices, getSubjectServices };
