@@ -116,8 +116,6 @@ const getSingleSubjectServices = async (SubjectId) => {
   if (!subject) {
     throw new Error("No subject found");
   }
-  console.log(subject);
-  
 
   return subject;
 };
