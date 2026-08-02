@@ -3,6 +3,7 @@ const {
   createSubjectConroller,
   getSubjectConroller,
   deleteSubjectConroller,
+  updateSubjectConroller,
 } = require("../../controllers/subjectController");
 const router = express.Router();
 
@@ -12,5 +13,7 @@ router.post("/create", createSubjectConroller);
 router.get("/subjectlist", getSubjectConroller);
 // ------delete subject
 router.delete("/delete/:id", deleteSubjectConroller)
+// -----update subject
+router.patch("/update/:id", updateSubjectConroller)
 
 module.exports = router;
