@@ -5,6 +5,8 @@ const {
   signInServices,
   getProfileServices,
   updateProfileServices,
+  forgetPasswordServices,
+  resetPasswordServices,
 } = require("../services/authServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -172,10 +174,45 @@ const updateProfileController = async (req, res) => {
   }
 };
 
-// ----reset password controller 
-const resetPasswordController = async(req, res)=>{
+// ----reset password controller
+const resetPasswordController = async (req, res) => {
+  try {
+    const { newpassword } = req.body;
+    const { token } = req.params;
+    const result = await resetPasswordServices(newpassword, token);
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "New password set successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
 
-}
+// -------forget password controller
+const forgetPasswordController = async (req, res) => {
+  try {
+    const result = await forgetPasswordServices(req.body);
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Check email for set new pass",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
 
 module.exports = {
   signupController,
@@ -184,5 +221,6 @@ module.exports = {
   signInController,
   getProfileController,
   updateProfileController,
-  resetPasswordController
+  resetPasswordController,
+  forgetPasswordController,
 };

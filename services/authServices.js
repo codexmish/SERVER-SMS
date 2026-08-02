@@ -2,6 +2,8 @@ const {
   isValidateEmail,
   isValidatePassword,
   generateOTP,
+  generateResetPasswordToken,
+  hashResetToken,
 } = require("../helpers/utility");
 const userSchema = require("../models/userSchema");
 const bcrypt = require("bcrypt");
@@ -13,6 +15,7 @@ const {
   uploadToCloudinary,
   destroyFromCloudinary,
 } = require("../helpers/cloudinaryService");
+const { ResetPasswordMailTemp } = require("../helpers/ResetPassMailTemplate");
 
 // -----signup Services
 const signupServices = async (payload) => {
@@ -315,9 +318,84 @@ const updateProfileServices = async (payload, userID, avaterData) => {
 };
 
 // -----reset password services
-const resetPasswordServices = async()=>{
+const resetPasswordServices = async (newpassword, token) => {
+  if (!newpassword) {
+    throw new Error("New password is required");
+  } else if (!isValidatePassword(newpassword)) {
+    throw new Error("Password not valid");
+  }
 
-}
+  if (!token) {
+    throw new Error("Invalid Request");
+  }
+
+  // ----hashing token
+  const hashedToken = hashResetToken(token);
+
+  const userData = await userSchema.findOne({
+    resetToken: hashedToken,
+    resetTokenExpiry: {
+      $gt: Date.now(),
+    },
+  });
+
+  if (!userData) {
+    throw new Error("Invalid Request");
+  }
+
+  // ----------password hashing
+  const hashedNewPassword = await bcrypt.hash(
+    newpassword,
+    Number(envConfig.SALT_ROUND),
+  );
+
+  // ----set New Pass
+  userData.password = hashedNewPassword;
+  userData.resetToken = null;
+  userData.resetTokenExpiry = null;
+
+  await userData.save();
+
+  return;
+};
+
+// -----forget password services
+const forgetPasswordServices = async (payload) => {
+  const { email } = payload;
+
+  if (!email) {
+    throw new Error("email is required");
+  } else if (!isValidateEmail(email)) {
+    throw new Error("Email is not valid");
+  }
+
+  // --------checking if user exist
+  const existUser = await userSchema.findOne({ email });
+
+  if (!existUser) {
+    throw new Error("No user found");
+  }
+
+  // ----generate reset pass token
+  const { resetToken, hashedToken } = generateResetPasswordToken();
+
+  // --set token
+  existUser.resetToken = hashedToken;
+  existUser.resetTokenExpiry = Date.now() + 5 * 60 * 1000;
+
+  // ----reset pass url
+  const resetPassUrl = `${envConfig.CLIENT_URL}/reset-password/${resetToken}`;
+  // ------send link to email
+  await mailSender({
+    email,
+    subject: "Reset Password",
+    mailTemp: ResetPasswordMailTemp(resetPassUrl),
+  });
+
+  existUser.save();
+
+  return;
+};
 
 module.exports = {
   signupServices,
@@ -326,5 +404,6 @@ module.exports = {
   signInServices,
   getProfileServices,
   updateProfileServices,
-  resetPasswordServices
+  resetPasswordServices,
+  forgetPasswordServices,
 };

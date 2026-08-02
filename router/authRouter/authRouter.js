@@ -8,6 +8,8 @@ const {
   signInController,
   getProfileController,
   updateProfileController,
+  forgetPasswordController,
+  resetPasswordController,
 } = require("../../controllers/authController");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
@@ -30,5 +32,9 @@ router.patch(
   upload.single("avatar"),
   updateProfileController,
 );
+// ---------forget password
+router.patch("/forgetpass", forgetPasswordController);
+// ---------reset password
+router.patch("/resetpass/:token", resetPasswordController);
 
 module.exports = router;

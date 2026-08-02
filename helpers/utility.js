@@ -1,4 +1,4 @@
-const crypto = require ("crypto")
+const crypto = require("crypto");
 
 // ---email razex
 function isValidateEmail(email) {
@@ -17,4 +17,28 @@ const generateOTP = () => {
   return crypto.randomInt(1000, 10000).toString();
 };
 
-module.exports = { isValidateEmail, isValidatePassword, generateOTP };
+// ----generate reset pass token
+const generateResetPasswordToken = () => {
+  const resetToken = crypto.randomBytes(16).toString("hex");
+  const hashedToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  return { resetToken, hashedToken };
+};
+
+// ----hash Reset Token
+
+const hashResetToken = (token) => {
+  const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
+  return hashedToken;
+};
+
+module.exports = {
+  isValidateEmail,
+  isValidatePassword,
+  generateOTP,
+  generateResetPasswordToken,
+  hashResetToken
+};
