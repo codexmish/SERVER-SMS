@@ -3,6 +3,7 @@ const {
   getSubjectServices,
   deleteSubjectServices,
   updateSubjectServices,
+  getSingleSubjectServices,
 } = require("../services/subjectServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -91,9 +92,31 @@ const updateSubjectConroller = async (req, res) => {
   }
 };
 
+// ------get single subject controller
+const getSingleSubjectConroller = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const result = await getSingleSubjectServices(id);
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Subject data get successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createSubjectConroller,
   getSubjectConroller,
   deleteSubjectConroller,
   updateSubjectConroller,
+  getSingleSubjectConroller,
 };

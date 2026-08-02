@@ -108,9 +108,24 @@ const updateSubjectServices = async (payload, subjectId) => {
   }
 };
 
+// ------get single subject
+const getSingleSubjectServices = async (SubjectId) => {
+  // -----checking single subject
+  const subject = await subjectSchema.findById(SubjectId);
+
+  if (!subject) {
+    throw new Error("No subject found");
+  }
+  console.log(subject);
+  
+
+  return subject;
+};
+
 module.exports = {
   createSubjectServices,
   getSubjectServices,
   deleteSubjectServices,
   updateSubjectServices,
+  getSingleSubjectServices,
 };
