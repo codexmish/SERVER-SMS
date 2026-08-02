@@ -10,6 +10,7 @@ const {
   updateProfileController,
   forgetPasswordController,
   resetPasswordController,
+  changePasswordController,
 } = require("../../controllers/authController");
 const authMiddleware = require("../../middlewares/authMiddleware");
 
@@ -36,5 +37,7 @@ router.patch(
 router.patch("/forgetpass", forgetPasswordController);
 // ---------reset password
 router.patch("/resetpass/:token", resetPasswordController);
+// --------change password
+router.patch("/changepass", authMiddleware, changePasswordController);
 
 module.exports = router;

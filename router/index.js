@@ -14,7 +14,7 @@ const limiter = rateLimit({
   skipSuccessfulRequests: true,
 });
 
-router.use(envConfig.BASE_URL,  authRoute);
+router.use(envConfig.BASE_URL, limiter, authRoute);
 router.use(envConfig.BASE_URL, adminRouter);
 router.use(envConfig.BASE_URL, subjectRouter);
 

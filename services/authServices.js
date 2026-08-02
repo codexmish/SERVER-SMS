@@ -397,6 +397,55 @@ const forgetPasswordServices = async (payload) => {
   return;
 };
 
+//-----forget password services
+const changePasswordServices = async (payload, userId) => {
+  const { oldPassword, newPasswrd } = payload;
+  // ----get a empty obj for all validation errors togather
+  const errors = {};
+
+  // ---Old password validatine
+  if (!oldPassword) {
+    errors.oldPassword = "Old Password is required";
+  } else if (!isValidatePassword(oldPassword)) {
+    errors.oldPassword = "Old Password not valid";
+  }
+
+  // ---New password validatine
+  if (!newPasswrd) {
+    errors.newPasswrd = "New Password is required";
+  } else if (!isValidatePassword(newPasswrd)) {
+    errors.newPasswrd = "New Password not valid";
+  }
+
+  // --------sending errors
+  if (Object.keys(errors).length > 0) {
+    return { errors: errors };
+  }
+
+  // ----getting user data
+  const existUser = await userSchema.findById(userId).select("+password");
+
+  if (!existUser) {
+    throw new Error("Something Bad");
+  }
+
+  // ----checking pass
+  if (!(await bcrypt.compare(oldPassword, existUser.password))) {
+    throw new Error("invalid credantial");
+  }
+
+  // ----------New password hashing
+  const hashedNewPassword = await bcrypt.hash(
+    newPasswrd,
+    Number(envConfig.SALT_ROUND),
+  );
+
+  existUser.password = hashedNewPassword;
+  await existUser.save();
+
+  return;
+};
+
 module.exports = {
   signupServices,
   otpVerifyServices,
@@ -406,4 +455,5 @@ module.exports = {
   updateProfileServices,
   resetPasswordServices,
   forgetPasswordServices,
+  changePasswordServices,
 };

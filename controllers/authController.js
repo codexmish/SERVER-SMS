@@ -7,6 +7,7 @@ const {
   updateProfileServices,
   forgetPasswordServices,
   resetPasswordServices,
+  changePasswordServices,
 } = require("../services/authServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -214,6 +215,25 @@ const forgetPasswordController = async (req, res) => {
   }
 };
 
+// -------change password controller
+const changePasswordController = async (req, res) => {
+  try {
+    const result = await changePasswordServices(req.body, req.user.data.id);
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "New password set successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   signupController,
   otpVerifyController,
@@ -223,4 +243,5 @@ module.exports = {
   updateProfileController,
   resetPasswordController,
   forgetPasswordController,
+  changePasswordController,
 };
