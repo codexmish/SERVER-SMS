@@ -3,6 +3,7 @@ const authMiddleware = require("../../middlewares/authMiddleware");
 const roleCheckMiddleware = require("../../middlewares/roleCheckMiddleware");
 const {
   createNoticeController,
+  getAllNoticeController,
 } = require("../../controllers/noticeController");
 const multer = require("multer");
 const upload = multer();
@@ -17,5 +18,8 @@ router.post(
   upload.single("image"),
   createNoticeController,
 );
+
+// -----get all notice
+router.get("/allnotice", getAllNoticeController);
 
 module.exports = router;

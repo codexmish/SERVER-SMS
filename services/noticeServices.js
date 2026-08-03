@@ -48,4 +48,15 @@ const createNoticeServices = async (payload, image, adminId) => {
   }
 };
 
-module.exports = { createNoticeServices };
+// ------get all notice services
+const getAllNoticeServices = async () => {
+  const allNotice = await noticeSchema.find();
+
+  if (allNotice.length == 0) {
+    throw new Error("No notice found");
+  }
+
+  return allNotice;
+};
+
+module.exports = { createNoticeServices, getAllNoticeServices };
