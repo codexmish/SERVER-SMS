@@ -4,6 +4,7 @@ const router = express.Router();
 const authRoute = require("./authRouter");
 const adminRouter = require("./adminRouter");
 const subjectRouter = require("./subjectRouter");
+const noticeRouter = require("./noticeRouter");
 const rateLimit = require("express-rate-limit");
 
 // ----------set api req limit
@@ -17,5 +18,6 @@ const limiter = rateLimit({
 router.use(envConfig.BASE_URL, limiter, authRoute);
 router.use(envConfig.BASE_URL, adminRouter);
 router.use(envConfig.BASE_URL, subjectRouter);
+router.use(envConfig.BASE_URL, noticeRouter);
 
 module.exports = router;
