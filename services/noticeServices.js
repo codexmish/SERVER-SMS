@@ -59,4 +59,19 @@ const getAllNoticeServices = async () => {
   return allNotice;
 };
 
-module.exports = { createNoticeServices, getAllNoticeServices };
+// ------get single notice services
+const getSingleNoticeServices = async (id) => {
+  const notice = await noticeSchema.findById(id);
+
+  if (!notice) {
+    throw new Error("Notice not exist");
+  }
+
+  return notice;
+};
+
+module.exports = {
+  createNoticeServices,
+  getAllNoticeServices,
+  getSingleNoticeServices,
+};

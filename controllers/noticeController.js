@@ -1,6 +1,7 @@
 const {
   createNoticeServices,
   getAllNoticeServices,
+  getSingleNoticeServices,
 } = require("../services/noticeServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -48,4 +49,29 @@ const getAllNoticeController = async (req, res) => {
   }
 };
 
-module.exports = { createNoticeController, getAllNoticeController };
+// ------get singel notice controller
+const getSingleNoticeController = async (req, res) => {
+  try {
+    const noticeId = req.params.id;
+    const result = await getSingleNoticeServices(noticeId);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Notice get successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+module.exports = {
+  createNoticeController,
+  getAllNoticeController,
+  getSingleNoticeController,
+};
