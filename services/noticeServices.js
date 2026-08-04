@@ -136,10 +136,33 @@ const deleteNoticeServices = async (noticeId) => {
   return result;
 };
 
+// -----add like services
+const addLikeServices = async (noticeId, userId) => {
+  // -----checking if notice exist
+  const existNotice = await noticeSchema.findById(noticeId);
+
+  if (!existNotice) {
+    throw new Error("Notice not exist");
+  }
+
+  // ------checking if already liked
+  if (existNotice.likers.includes(userId)) {
+    const index = existNotice.likers.indexOf(userId);
+    existNotice.likers.splice(index, 1);
+  } else {
+    existNotice.likers.push(userId);
+  }
+
+  existNotice.like = existNotice.likers.length;
+  existNotice.save();
+  return existNotice;
+};
+
 module.exports = {
   createNoticeServices,
   getAllNoticeServices,
   getSingleNoticeServices,
   updateNoticeServices,
   deleteNoticeServices,
+  addLikeServices,
 };

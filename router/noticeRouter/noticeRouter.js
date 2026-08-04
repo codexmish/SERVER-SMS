@@ -6,6 +6,7 @@ const {
   getSingleNoticeController,
   updateNoticeController,
   deleteNoticeController,
+  addLikeController,
 } = require("../../controllers/noticeController");
 const multer = require("multer");
 const upload = multer();
@@ -38,5 +39,8 @@ router.delete(
   roleCheckMiddleware(["ADMIN"]),
   deleteNoticeController,
 );
+
+// -----add like router
+router.patch("/addlike/:id", addLikeController);
 
 module.exports = router;
