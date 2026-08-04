@@ -58,4 +58,31 @@ const createClassServices = async (payload, adminId) => {
   return newClass;
 };
 
-module.exports = { createClassServices };
+// -------get all class services
+const getAllClassServices = async () => {
+  const allCClass = await classSchema.find();
+
+  if (allCClass.length == 0) {
+    throw new Error("No class found");
+  }
+
+  return allCClass;
+};
+
+// -------get single class services
+const getSingleClassServices = async (classId) => {
+  // ----finding class
+  const classData = await classSchema.findById(classId);
+
+  if (!classData) {
+    throw new Error("This class not available");
+  }
+
+  return classData;
+};
+
+module.exports = {
+  createClassServices,
+  getAllClassServices,
+  getSingleClassServices,
+};
