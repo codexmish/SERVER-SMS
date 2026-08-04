@@ -2,6 +2,7 @@ const {
   createNoticeServices,
   getAllNoticeServices,
   getSingleNoticeServices,
+  updateNoticeServices,
 } = require("../services/noticeServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -70,8 +71,33 @@ const getSingleNoticeController = async (req, res) => {
     });
   }
 };
+
+// ------update notice controller
+const updateNoticeController = async (req, res) => {
+  try {
+    const noticeId = req.params.id;
+    const image = req.file;
+    const result = await updateNoticeServices(req.body, image, noticeId);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Notice update successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createNoticeController,
   getAllNoticeController,
   getSingleNoticeController,
+  updateNoticeController,
 };
