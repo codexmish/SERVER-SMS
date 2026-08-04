@@ -81,6 +81,7 @@ const getSingleClassServices = async (classId) => {
   return classData;
 };
 
+// ------update class services
 const updateClassServices = async (payload, classId) => {
   const { name, code, description, subjectCode } = payload;
 
@@ -116,9 +117,26 @@ const updateClassServices = async (payload, classId) => {
   return classData;
 };
 
+// ------delete class services
+const deleteClassServices = async (classId) => {
+  // ---checking if class exist
+  const classData = await classSchema.findById(classId);
+  
+
+  if (!classData) {
+    throw new Error("This class not available");
+  }
+
+  //   ----deleting class
+  await classSchema.findByIdAndDelete(classData);
+
+  return;
+};
+
 module.exports = {
   createClassServices,
   getAllClassServices,
   getSingleClassServices,
   updateClassServices,
+  deleteClassServices,
 };

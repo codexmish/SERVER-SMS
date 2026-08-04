@@ -3,6 +3,7 @@ const {
   getAllClassServices,
   getSingleClassServices,
   updateClassServices,
+  deleteClassServices,
 } = require("../services/classServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -101,9 +102,30 @@ const updateClassController = async (req, res) => {
   }
 };
 
+const deleteClassController = async (req, res) => {
+  try {
+    const result = await deleteClassServices(req.params.id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Class deleted successfully",
+      //   data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createClassController,
   getAllClassController,
   getSingleClassController,
   updateClassController,
+  deleteClassController,
 };

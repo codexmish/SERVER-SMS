@@ -4,6 +4,7 @@ const {
   getAllClassController,
   getSingleClassController,
   updateClassController,
+  deleteClassController,
 } = require("../../controllers/classController");
 const roleCheckMiddleware = require("../../middlewares/roleCheckMiddleware");
 
@@ -17,5 +18,7 @@ router.get("/classes", roleCheckMiddleware(["ADMIN", "TEACHER"]), getAllClassCon
 router.post("/class/:id", roleCheckMiddleware(["ADMIN", "TEACHER"]), getSingleClassController);
 // ------update class
 router.patch("/update/:id", roleCheckMiddleware(["ADMIN"]), updateClassController)
+// -----delete class
+router.delete("/delete/:id", roleCheckMiddleware(["ADMIN"]), deleteClassController)
 
 module.exports = router;
