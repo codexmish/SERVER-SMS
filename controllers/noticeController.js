@@ -3,6 +3,7 @@ const {
   getAllNoticeServices,
   getSingleNoticeServices,
   updateNoticeServices,
+  deleteNoticeServices,
 } = require("../services/noticeServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -95,9 +96,31 @@ const updateNoticeController = async (req, res) => {
   }
 };
 
+// ------delete notice controller
+const deleteNoticeController = async (req, res) => {
+  try {
+    const noticeId = req.params.id;
+    const result = await deleteNoticeServices(noticeId);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Notice deleted successfully",
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createNoticeController,
   getAllNoticeController,
   getSingleNoticeController,
   updateNoticeController,
+  deleteNoticeController,
 };

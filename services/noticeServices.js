@@ -122,9 +122,24 @@ const updateNoticeServices = async (payload, image, noticeId) => {
   }
 };
 
+// ----delete notice services
+const deleteNoticeServices = async (noticeId) => {
+  // -----checkking if noticeExist
+  const existNotice = await noticeSchema.findById(noticeId);
+
+  if (!existNotice) {
+    throw new Error("Notice not exist");
+  }
+
+  // ------deleting notice
+  const result = await noticeSchema.findByIdAndDelete(noticeId);
+  return result;
+};
+
 module.exports = {
   createNoticeServices,
   getAllNoticeServices,
   getSingleNoticeServices,
   updateNoticeServices,
+  deleteNoticeServices,
 };

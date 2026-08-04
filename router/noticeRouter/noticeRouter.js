@@ -5,6 +5,7 @@ const {
   getAllNoticeController,
   getSingleNoticeController,
   updateNoticeController,
+  deleteNoticeController,
 } = require("../../controllers/noticeController");
 const multer = require("multer");
 const upload = multer();
@@ -29,6 +30,13 @@ router.patch(
   roleCheckMiddleware(["ADMIN"]),
   upload.single("image"),
   updateNoticeController,
+);
+
+// -----delete notice
+router.delete(
+  "/delete/:id",
+  roleCheckMiddleware(["ADMIN"]),
+  deleteNoticeController,
 );
 
 module.exports = router;
