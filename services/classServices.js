@@ -81,8 +81,44 @@ const getSingleClassServices = async (classId) => {
   return classData;
 };
 
+const updateClassServices = async (payload, classId) => {
+  const { name, code, description, subjectCode } = payload;
+
+  // ---checking if class exist
+  const classData = await classSchema.findById(classId);
+
+  if (!classData) {
+    throw new Error("This class not available");
+  }
+
+  //   ----updating data
+
+  if (name) classData.name = name;
+  if (description) classData.description = description;
+  if (code) classData.code = code;
+  if (subjectCode) {
+    // ----checking if subject exist
+    const subjectExist = await subjectSchema.findOne({ code: subjectCode });
+
+    if (!subjectExist) {
+      throw new Error("subject not exist");
+    }
+
+    if (classData.subjects.includes(subjectExist.id)) {
+      throw new Error("Subject already added on this class");
+    }
+
+    classData.subjects.push(subjectExist.id);
+  }
+
+  await classData.save();
+
+  return classData;
+};
+
 module.exports = {
   createClassServices,
   getAllClassServices,
   getSingleClassServices,
+  updateClassServices,
 };

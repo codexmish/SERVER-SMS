@@ -2,6 +2,7 @@ const {
   createClassServices,
   getAllClassServices,
   getSingleClassServices,
+  updateClassServices,
 } = require("../services/classServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -60,7 +61,6 @@ const getAllClassController = async (req, res) => {
 const getSingleClassController = async (req, res) => {
   try {
     const classId = req.params.id;
-    
 
     const result = await getSingleClassServices(classId);
 
@@ -80,8 +80,30 @@ const getSingleClassController = async (req, res) => {
   }
 };
 
+// ------update class controller
+const updateClassController = async (req, res) => {
+  try {
+    const result = await updateClassServices(req.body, req.params.id);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Class data updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createClassController,
   getAllClassController,
   getSingleClassController,
+  updateClassController,
 };
