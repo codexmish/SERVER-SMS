@@ -157,11 +157,41 @@ const addLikeServices = async (noticeId, userId) => {
     if (existNotice.dislikers.includes(userId)) {
       const index = existNotice.dislikers.indexOf(userId);
       existNotice.dislikers.splice(index, 1);
-      existNotice.dislike = existNotice.dislikers.length;
     }
   }
 
   existNotice.like = existNotice.likers.length;
+  existNotice.dislike = existNotice.dislikers.length;
+  existNotice.save();
+  return existNotice;
+};
+
+// -----add disloike services
+const addDislikeServices = async (noticeId, userId) => {
+  // -----checking if notice exist
+  const existNotice = await noticeSchema.findById(noticeId);
+
+  if (!existNotice) {
+    throw new Error("Notice not exist");
+  }
+
+  // ------checking if already Disliked
+  if (existNotice.dislikers.includes(userId)) {
+    // ----unlike if already liked
+    const index = existNotice.dislikers.indexOf(userId);
+    existNotice.dislikers.splice(index, 1);
+  } else {
+    // adding like
+    existNotice.dislikers.push(userId);
+    // ---removing like if liked
+    if (existNotice.likers.includes(userId)) {
+      const index = existNotice.likers.indexOf(userId);
+      existNotice.likers.splice(index, 1);
+    }
+  }
+
+  existNotice.like = existNotice.likers.length;
+  existNotice.dislike = existNotice.dislikers.length;
   existNotice.save();
   return existNotice;
 };
@@ -173,4 +203,5 @@ module.exports = {
   updateNoticeServices,
   deleteNoticeServices,
   addLikeServices,
+  addDislikeServices,
 };

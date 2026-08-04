@@ -7,6 +7,7 @@ const {
   updateNoticeController,
   deleteNoticeController,
   addLikeController,
+  addDislikeController,
 } = require("../../controllers/noticeController");
 const multer = require("multer");
 const upload = multer();
@@ -42,5 +43,7 @@ router.delete(
 
 // -----add like router
 router.patch("/addlike/:id", addLikeController);
+// -----add dislike router
+router.patch("/adddislike/:id", addDislikeController);
 
 module.exports = router;

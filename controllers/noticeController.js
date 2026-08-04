@@ -5,6 +5,7 @@ const {
   updateNoticeServices,
   deleteNoticeServices,
   addLikeServices,
+  addDislikeServices,
 } = require("../services/noticeServices");
 const { sendRes } = require("../utils/sendRes");
 
@@ -141,6 +142,29 @@ const addLikeController = async (req, res) => {
   }
 };
 
+// -----add dislike controller
+const addDislikeController = async (req, res) => {
+  try {
+    const noticeId = req.params.id;
+    const userId = req.user.data.id;
+    const result = await addDislikeServices(noticeId, userId);
+
+    sendRes(res, {
+      statusCode: 200,
+      success: true,
+      message: "Notice Dislike updated successfully",
+      data: result,
+    });
+  } catch (error) {
+    sendRes(res, {
+      statusCode: 500,
+      success: false,
+      message: error.message,
+      error: error,
+    });
+  }
+};
+
 module.exports = {
   createNoticeController,
   getAllNoticeController,
@@ -148,4 +172,5 @@ module.exports = {
   updateNoticeController,
   deleteNoticeController,
   addLikeController,
+  addDislikeController,
 };
