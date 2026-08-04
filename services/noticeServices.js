@@ -147,10 +147,18 @@ const addLikeServices = async (noticeId, userId) => {
 
   // ------checking if already liked
   if (existNotice.likers.includes(userId)) {
+    // ----unlike if already liked
     const index = existNotice.likers.indexOf(userId);
     existNotice.likers.splice(index, 1);
   } else {
+    // adding like
     existNotice.likers.push(userId);
+    // ---removing dislike if disliked
+    if (existNotice.dislikers.includes(userId)) {
+      const index = existNotice.dislikers.indexOf(userId);
+      existNotice.dislikers.splice(index, 1);
+      existNotice.dislike = existNotice.dislikers.length;
+    }
   }
 
   existNotice.like = existNotice.likers.length;
