@@ -26,7 +26,7 @@ const signupController = async (req, res) => {
     }
 
     sendRes(res, {
-      statusCode: 200,
+      statusCode: 201,
       success: true,
       message: "user created successfully",
       data: result,
